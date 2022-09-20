@@ -1,3 +1,5 @@
+import { ajoutListenersAvis } from "./avis.js"; 
+
 // Récupération des pièces depuis le fichier JSON
 const reponse = await fetch ('pieces-autos.json');
 const pieces = await reponse.json();
@@ -49,7 +51,11 @@ for (let i = 0; i < pieces.length; i++) {
 
     //Une fois que tout est récupéré, on rattache la nouvelle balise à la section
     sectionFiches.appendChild(pieceElement);
+
+ajoutListenersAvis();
 }
+
+
 
 // Ajout du listener pour trier les pièces par ordre de prix croissant
 const boutonTrier = document.querySelector(".btn-trier");
