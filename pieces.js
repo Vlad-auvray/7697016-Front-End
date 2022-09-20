@@ -60,3 +60,87 @@ boutonTrier.addEventListener("click", function() {
     });
     console.log(piecesReordonnees);
 });
+
+const boutonFiltrer = document.querySelector(".btn-filtrer");
+boutonFiltrer.addEventListener("click", function() {
+    const piecesFiltrees = pieces.filter(function (piece) {
+        return piece.prix <= 35;
+    });
+   console.log(piecesFiltrees);
+}); 
+
+
+
+
+//Récupérer le nom des pièces
+const noms = pieces.map(piece => piece.nom);
+
+//En remontant la liste des éléments par la fin, si les éléments balayés ont un prix supérieur à 35 alors on les retire de la liste. 
+for (let i = pieces.length - 1; i >= 0; i--) {
+    if (pieces[i].prix > 35) {
+        noms.splice (i, 1);
+    }
+}
+
+// Ces pièces doivent apparaitre au sein d'une liste qu'on va créer
+
+const abordablesElement = document.createElement("ul");
+
+//On créée les li associés
+for (let i = 0; i < noms.length; i++)
+{
+    const nomElement = document.createElement("li");
+    nomElement.innerText = noms[i];
+    abordablesElement.appendChild(nomElement);
+}
+
+//La liste est ensuite raccrochée au parent pour être visible sur le document
+
+document.querySelector(".abordables").appendChild(abordablesElement);
+
+
+
+
+
+
+// Résumé des pièces DISPONIBLES; la première ne retiens que le NOM; la seconde ne retient que le PRIX
+const nomsDisponibles = pieces.map(piece => piece.nom);
+const prixDisponibles = pieces.map(piece => piece.prix);
+
+//On REMONTE la liste des pièces, jusqu'à la première; pour vérifier si oui ou non la pièce est disponible. On souhaite RETIRER le nom et le prix, des pièces NON DISPO. 
+for (let i = pieces.length - 1; i >= 0; i--) {
+    if (pieces[i].disponibilite === false) {
+        nomsDisponibles.splice(i, 1);
+        prixDisponibles.splice(i, 1);
+    }
+}
+
+// Ces pièces disponibles doivent apparaitre au sein d'une liste qu'on va créer
+
+const disponiblesElement = document.createElement("ul");
+
+//On créée les li associés, 
+for (let i = 0; i < nomsDisponibles.length; i++)
+{
+    const nomElement = document.createElement("li");
+    nomElement.innerText = nomsDisponibles[i] + " - " + prixDisponibles[i] + " €";
+    disponiblesElement.appendChild(nomElement);
+}
+
+//Cette deuxième liste est ensuite raccrochée au parent pour être visible sur le document
+
+document.querySelector(".disponibles").appendChild(disponiblesElement);
+
+
+
+// Fonction pour récupérer le RANGE (curseur), le but est que l'affichage change selon la fourchette de prix souhaitée 
+const inputPrixMax = document.querySelector("#prix-max");
+inputPrixMax.addEventListener("input",function() {
+    const piecesFiltrees= pieces.filter(function (piece) {
+        return piece.prix <= inputPrixMax.value;
+});
+
+//On efface l'écran et régénère la page avec les uniquement pièces filtrées
+    document.querySelector(".fiches").innerHTML = "";
+    genererPieces(piecesFiltrees);
+});
